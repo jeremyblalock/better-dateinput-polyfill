@@ -1,6 +1,6 @@
 /**
  * better-dateinput-polyfill: input[type=date] polyfill
- * @version 4.0.0-beta.2 Sat, 17 Apr 2021 16:07:26 GMT
+ * @version 4.0.0-beta.2 Tue, 08 Jun 2021 15:26:22 GMT
  * @link https://github.com/chemerisuk/better-dateinput-polyfill
  * @copyright 2021 Maksim Chemerisuk
  * @license MIT
@@ -26,8 +26,8 @@
         return Array.apply(null, Array(times)).map(fn).join("");
       }
     }
-    function svgIcon(path) {
-      return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"100%\" viewBox=\"0 0 16 16\"><path d=\"" + path + "\"/></svg>";
+    function svgIcon(path, size) {
+      return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + size + "\" height=\"100%\" viewBox=\"0 0 " + size + " " + size + "\"><path d=\"" + path + "\"/></svg>";
     }
     function injectStyles(cssText, head) {
       var style = DOCUMENT.createElement("style");
@@ -184,7 +184,7 @@
         var startYear = minDate ? minDate.getFullYear() : now.getFullYear() - defaultYearDelta;
         var endYear = maxDate ? maxDate.getFullYear() : now.getFullYear() + defaultYearDelta; // append picker HTML to shadow dom
 
-        pickerRoot.body.innerHTML = "<header><a role=\"button\" rel=\"prev\">" + svgIcon("M11.5 14.06L1 8L11.5 1.94z") + "</a> <time id=\"caption\" aria-live=\"polite\"></time> <a role=\"button\" rel=\"next\">" + svgIcon("M15 8L4.5 14.06L4.5 1.94z") + "</a></header><table role=\"grid\" aria-labelledby=\"#caption\"><thead id=\"weekdays\">" + repeat(7, function (_, i) {
+        pickerRoot.body.innerHTML = "<header><a role=\"button\" rel=\"prev\">" + svgIcon("M11.5 14.06L1 8L11.5 1.94z", 16) + "</a> <time id=\"caption\" aria-live=\"polite\"></time> <a role=\"button\" rel=\"next\">" + svgIcon("M15 8L4.5 14.06L4.5 1.94z", 16) + "</a></header><table role=\"grid\" aria-labelledby=\"#caption\"><thead id=\"weekdays\">" + repeat(7, function (_, i) {
           return "<th>" + localeWeekday(i, _this2._formatOptions) + "</th>";
         }) + "</thead><tbody id=\"days\">" + repeat(6, "<tr>" + repeat(7, "<td>") + "</tr>") + "</tbody></table><div aria-hidden=\"true\" aria-labelledby=\"#caption\"><ol id=\"months\">" + repeat(12, function (_, i) {
           return "<li data-month=\"" + i + "\">" + localeMonth(i, _this2._formatOptions);
@@ -253,7 +253,14 @@
       _proto._clickDate = function _clickDate(target) {
         if (target.getAttribute("aria-disabled") !== "true") {
           this._input.value = target.getAttribute("data-date");
-          this.hide();
+          this.hide(); // Dispatch change event
+
+          if (document.createEvent) {
+            var evt = document.createEvent('HTMLEvents');
+            evt.initEvent('change', true, false);
+
+            this._input.dispatchEvent(evt);
+          }
         }
       };
 

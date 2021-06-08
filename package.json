@@ -1,7 +1,8 @@
 {
-  "name": "better-dateinput-polyfill",
+  "name": "@inventora/better-dateinput-polyfill",
   "description": "input[type=date] polyfill",
   "version": "4.0.0-beta.2",
+  "private": false,
   "author": "Maksim Chemerisuk",
   "license": "MIT",
   "homepage": "https://github.com/chemerisuk/better-dateinput-polyfill",
@@ -25,17 +26,16 @@
     "postcss": "^8.2.9",
     "postcss-font-family-system-ui": "^5.0.0",
     "postcss-preset-env": "^6.7.0",
+    "react-refresh": "^0.10.0",
     "rollup": "^2.44.0",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "scripts": {
     "build": "rollup --config",
-    "watch": "rollup --config --watch --silent | karma start",
+    "watch": "rollup --config --watch",
     "test": "karma start --single-run",
-    "version": "npm run build -- --configDist && git add -A dist",
-    "postversion": "git push && git push --tags",
-    "publish": "gh-pages -s '{index.html,README.md,build/*}' -d ."
+    "version": "npm run build -- --configDist && git add -A dist"
   },
   "browserslist": [
     "ChromeAndroid 70",
